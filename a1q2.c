@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
     
 #define BUFSIZE 256
     
@@ -11,6 +12,7 @@ int main(int argc, char** argv) {
         return -1;
     }
     char cmd[BUFSIZE] = "wc -c < ";
-    strcat(cmd, argv[1]);
+    // Check to make sure string length is always valid
+    strncat(cmd, argv[1], BUFSIZE - strlen(cmd) - 1);
     system(cmd);
 }
