@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
     
 #define BUFSIZE 256
     
@@ -11,11 +12,13 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Please provide the address of a file as an input.\n");
         return -1;
     }
-    char cmd[BUFSIZE] = "wc -c < ";
-    // Check to make sure string length is always valid
-    strncat(cmd, argv[1], BUFSIZE - strlen(cmd) - 1);
-    // Validate the cmd
-    snprintf(cmd, sizeof(cmd), "wc -c < \"%s\"", argv[1]);
+    
+    // Dont use command line to get file size
+    struct stat fileStat;
+    if (stat(argv[1], &fileStat) != 0) {
+        fprintf(stderr, "Invalid input.\n");
+        return -1;
+    }
 
-    system(cmd);
+    printf("%lld\n", fileStat.st_size);
 }
