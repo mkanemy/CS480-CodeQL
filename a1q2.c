@@ -14,16 +14,8 @@ int main(int argc, char** argv) {
     char cmd[BUFSIZE] = "wc -c < ";
     // Check to make sure string length is always valid
     strncat(cmd, argv[1], BUFSIZE - strlen(cmd) - 1);
+    // Validate the cmd
+    snprintf(cmd, sizeof(cmd), "wc -c < \"%s\"", argv[1]);
 
-    // Use popen instead of system
-    int fileSize;
-    FILE *fp = popen(cmd, "r");
-    if (fp == NULL || fscanf(fp, "%d", &fileSize) != 1) {
-        pclose(fp);
-        return -1;
-    }
-
-    pclose(fp);
-
-    printf("%d\n", fileSize);
+    system(cmd);
 }
